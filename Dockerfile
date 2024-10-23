@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim AS build
 WORKDIR /WasteScheduler
 
 # Gradle Wrapper と設定ファイルをコピー
-COPY .r/gradlew .
+COPY ./gradlew .
 COPY ./gradle gradle
 COPY ./build.gradle .
 COPY ./settings.gradle .
