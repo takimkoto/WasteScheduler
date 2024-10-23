@@ -1,14 +1,11 @@
-# ベースイメージとして OpenJDK を使用
-FROM openjdk:11-jre-slim
-
-# 作業ディレクトリを指定
+FROM eclipse-temurin:17-jdk-focal
+ 
 WORKDIR /WasteScheduler
-
-# アプリケーションの JAR ファイルをコンテナにコピー
-COPY target/*.jar WasteScheduler.jar
-
-# アプリケーションが使用するポートを公開
-EXPOSE 8080
-
-# アプリケーションを実行
-CMD ["java", "-jar", "WasteScheduler.jar"]
+ 
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+ 
+COPY src ./src
+ 
+CMD ["./mvnw", "spring-boot:run"]
