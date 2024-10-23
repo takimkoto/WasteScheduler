@@ -2,7 +2,7 @@
 FROM openjdk:11-jre-slim AS build
 
 # 作業ディレクトリを指定
-WORKDIR /app
+WORKDIR /WasteScheduler
 
 # Gradle Wrapper と設定ファイルをコピー
 COPY WasteScheduler/gradlew .
@@ -24,4 +24,4 @@ RUN ./gradlew build --no-daemon
 FROM openjdk:11-jre-slim
 COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "WasteScheduler.jar"]
