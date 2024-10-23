@@ -1,4 +1,4 @@
-FROM maven:3-eclipse-temurin-23 AS build
+FROM gradle:3-eclipse-temurin-23 AS build
 COPY ./ /home/app
 RUN cd /home/app && ./gradlew clean package -Dmaven.test.skip=true
 FROM eclipse-temurin:23-alpine
