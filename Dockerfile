@@ -1,24 +1,8 @@
-#
-# Build stage
-#
-FROM amazoncorretto:17 AS builder
-ARG WORKDIR
-ENV HOME=/${WORKDIR} \
-    LANG=C.UTF-8 \
-    TZ=Asia/Tokyo \
-    HOST=0.0.0.0
-WORKDIR ${HOME}
-COPY ./ ${HOME}
-RUN ./gradlew build
-#
-# Package stage
-#
+FROM amazoncorretto:17 AS build
+COPY ./ /home/app
+RUN cd /home/app && ./gradlew build
+
 FROM amazoncorretto:17-alpine
-ARG WORKDIR
-ENV HOME=${WORKDIR} \
-    LANG=C.UTF-8 \
-    TZ=Asia/Tokyo \
-    HOST=0.0.0.0
-COPY --from=builder ${HOME}/build/libs/share-favplace-api-0.0.1-SNAPSHOT.jar share-favplace-api.jar
+COPY --from=build /home/app/build/libs/spring-render-deploy-0.0.1-SNAPSHOT.jar /usr/local/lib/spring-render-deploy.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","share-favplace-api.jar"]
+ENTRYPOINT ["java","-jar","-Dfile.encoding=UTF-8","/usr/local/lib/spring-render-deploy.jar"]
