@@ -2,20 +2,20 @@
 FROM openjdk:11-jre-slim AS build
 
 # 作業ディレクトリを指定
-WORKDIR /WasteScheduler
+WORKDIR /app
 
-# Gradle Wrapper と必要なファイルをコピー
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
+# Gradle Wrapper と設定ファイルをコピー
+COPY WasteScheduler/gradlew .
+COPY WasteScheduler/gradle gradle
+COPY WasteScheduler/build.gradle .
+COPY WasteScheduler/settings.gradle .
 
 # 依存関係をインストール
 RUN chmod +x gradlew
-RUN ./gradlew build --no-daemon
+RUN ./gradlew dependencies --no-daemon
 
 # アプリケーションのソースコードをコピー
-COPY src ./src
+COPY WasteScheduler/src ./src
 
 # アプリケーションをビルド
 RUN ./gradlew build --no-daemon
@@ -24,4 +24,4 @@ RUN ./gradlew build --no-daemon
 FROM openjdk:11-jre-slim
 COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-CMD ["java", "-jar", "WasteScheduler.jar"]
+CMD ["java", "-jar", "app.jar"]
