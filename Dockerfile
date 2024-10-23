@@ -15,7 +15,7 @@ RUN chmod +x gradlew
 RUN ./gradlew dependencies --no-daemon
 
 # アプリケーションのソースコードをコピー
-COPY WasteScheduler/src ./src
+COPY ./src ./src
 
 # アプリケーションをビルド
 RUN ./gradlew build --no-daemon
