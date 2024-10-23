@@ -1,27 +1,24 @@
-# ベースイメージとして OpenJDK を使用
-FROM openjdk:11-jre-slim AS build
-
-# 作業ディレクトリを指定
-WORKDIR /WasteScheduler
-
-# Gradle Wrapper と設定ファイルをコピー
-COPY ./gradlew .
-COPY ./gradle gradle
-COPY ./build.gradle .
-COPY ./settings.gradle .
-
-# 依存関係をインストール
-RUN chmod +x gradlew
-RUN ./gradlew clean build --no-daemon
-
-# アプリケーションのソースコードをコピー
-COPY ./src ./src
-
-# アプリケーションをビルド
-RUN ./gradlew build --no-daemon
-
-# JAR ファイルを最終イメージにコピー
-FROM openjdk:11-jre-slim
-COPY --from=build /app/build/libs/*.jar app.jar
+#
+# Build stage
+#
+FROM amazoncorretto:17 AS builder
+ARG WORKDIR
+ENV HOME=/${WORKDIR} \
+    LANG=C.UTF-8 \
+    TZ=Asia/Tokyo \
+    HOST=0.0.0.0
+WORKDIR ${HOME}
+COPY ./ ${HOME}
+RUN ./gradlew build
+#
+# Package stage
+#
+FROM amazoncorretto:17-alpine
+ARG WORKDIR
+ENV HOME=${WORKDIR} \
+    LANG=C.UTF-8 \
+    TZ=Asia/Tokyo \
+    HOST=0.0.0.0
+COPY --from=builder ${HOME}/build/libs/share-favplace-api-0.0.1-SNAPSHOT.jar share-favplace-api.jar
 EXPOSE 8080
-CMD ["java", "-jar", "WasteScheduler.jar"]
+ENTRYPOINT ["java","-jar","share-favplace-api.jar"]
