@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /WasteScheduler
 
 # アプリケーションの JAR ファイルをコンテナにコピー
-COPY target/*.jar app.jar
+COPY target/*.jar WasteScheduler.jar
 
 # アプリケーションが使用するポートを公開
 EXPOSE 8080
