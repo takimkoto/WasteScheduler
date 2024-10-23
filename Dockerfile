@@ -11,4 +11,4 @@ COPY target/*.jar WasteScheduler.jar
 EXPOSE 8080
 
 # アプリケーションを実行
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "WasteScheduler.jar"]
