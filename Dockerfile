@@ -12,7 +12,7 @@ COPY ./settings.gradle .
 
 # 依存関係をインストール
 RUN chmod +x gradlew
-RUN ./gradlew dependencies --no-daemon
+RUN ./gradlew build --no-daemon
 
 # アプリケーションのソースコードをコピー
 COPY ./src ./src
