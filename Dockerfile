@@ -5,10 +5,10 @@ FROM openjdk:11-jre-slim AS build
 WORKDIR /WasteScheduler
 
 # Gradle Wrapper と設定ファイルをコピー
-COPY WasteScheduler/gradlew .
-COPY WasteScheduler/gradle gradle
-COPY WasteScheduler/build.gradle .
-COPY WasteScheduler/settings.gradle .
+COPY .r/gradlew .
+COPY ./gradle gradle
+COPY ./build.gradle .
+COPY ./settings.gradle .
 
 # 依存関係をインストール
 RUN chmod +x gradlew
